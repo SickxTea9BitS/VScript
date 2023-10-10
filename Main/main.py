@@ -19,6 +19,15 @@ while True:  # Changed while(1) to while True for an infinite loop
             mytext = mytext.lower()
 
             print("Did you say", mytext)
+              with open('test_file_1','a') as t_f1:
+                t_f1.write(str(mytext+'\n'))
+
+            test_output += mytext+'\n'
+
+            speakText(mytext)
+
+            if mytext == '001':
+                break
             speakText(mytext)
     except sr.RequestError as e:
         print("Could not request result; {0}".format(e))  # Fixed the typo
