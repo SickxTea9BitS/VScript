@@ -1,7 +1,6 @@
-#Start
-
-import speech_recognition as sr
 import pyttsx3
+import speech_recognition as sr
+import datetime
 
 r = sr.Recognizer()
 
@@ -10,18 +9,33 @@ def speakText(command):
     engine.say(command)
     engine.runAndWait()
 
-while True:  # Changed while(1) to while True for an infinite loop
-    try:
-        with sr.Microphone() as source2:
-            r.adjust_for_ambient_noise(source2, duration=0.2)
-            audio2 = r.listen(source2)
-            mytext = r.recognize_google(audio2)
-            mytext = mytext.lower()
+test_output = ''
 
-            print("Did you say", mytext)
+while True:
+    try:
+        with sr.Microphone() as source:
+            print("started")
+            r.adjust_for_ambient_noise(source, duration=0.2)
+            audio = r.listen(source)
+            mytext = r.recognize_google(audio).lower()
+
+            print("Did you say:", mytext)
+
+            test_output += mytext + '\n'
+
             speakText(mytext)
+
+            if mytext == '001':
+                
+                current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                file_name = f"output_{current_time}.txt"
+                with open(file_name, 'w') as t_f2:
+                    t_f2.write(test_output)
+                print(f"All recognized text saved to {file_name}")
+                break
+
     except sr.RequestError as e:
-        print("Could not request result; {0}".format(e))  # Fixed the typo
+        print("Could not request result; {0}".format(e))
 
     except sr.UnknownValueError:
         print("Unknown error occurred")
